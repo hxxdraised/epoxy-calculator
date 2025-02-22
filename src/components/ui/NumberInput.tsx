@@ -20,6 +20,7 @@ export const NumberInput: React.FC<NumberInputProps> = ({
       <Input
         {...props}
         type="number"
+        size={props.size ?? "lg"}
         value={value.toString()}
         onValueChange={handleChange}
       />

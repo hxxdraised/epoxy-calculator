@@ -1,22 +1,25 @@
 import { useMemo, useState } from "react";
 import { NumberInput } from "./ui/NumberInput";
+import { BigNumber } from "./ui/BigNumber";
 
 export const Calculator: React.FC = () => {
   const [volume, setVolume] = useState(0);
   const [density, setDensity] = useState(1.1);
   const [ratio, setRatio] = useState({ a: 2, b: 1 });
 
-  const result = useMemo(
-    () => ({
-      a: ((volume * density * ratio.a) / (ratio.a + ratio.b)).toFixed(2),
-      b: ((volume * density * ratio.b) / (ratio.a + ratio.b)).toFixed(2),
-      both: (volume * density).toFixed(2),
-    }),
-    [volume, density, ratio.a, ratio.b],
-  );
+  const result = useMemo(() => {
+    const a = (volume * density * ratio.a) / (ratio.a + ratio.b);
+    const b = (volume * density * ratio.b) / (ratio.a + ratio.b);
+    const both = volume * density;
+    return {
+      a: Number.isNaN(a) ? "..." : a.toFixed(2),
+      b: Number.isNaN(b) ? "..." : b.toFixed(2),
+      both: Number.isNaN(both) ? "..." : both.toFixed(2),
+    };
+  }, [volume, density, ratio.a, ratio.b]);
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-6">
       <NumberInput
         label="Объем молда (мл)"
         value={volume}
@@ -31,14 +34,18 @@ export const Calculator: React.FC = () => {
           />
         </div>
         <div>
-          <p className="text-sm">Соотношение смолы к отвердителю, в ч.</p>
-          <div className="flex gap-4">
+          <p className="text-sm text-default-600">
+            Соотношение смолы к отвердителю, в ч.
+          </p>
+          <div className="flex gap-2">
             <NumberInput
+              size="sm"
               label="А"
               value={ratio.a}
               onValueChange={(a) => setRatio({ ...ratio, a })}
             />
             <NumberInput
+              size="sm"
               label="Б"
               value={ratio.b}
               onValueChange={(b) => setRatio({ ...ratio, b })}
@@ -46,9 +53,16 @@ export const Calculator: React.FC = () => {
           </div>
         </div>
       </div>
-      <p className="font-semibold">Масса компонента А: {result.a} г</p>
+      <div className="flex flex-wrap justify-center gap-2 sm:gap-4 sm:p-6">
+        <BigNumber label="Компонент А" value={result.a} />
+        <h1 className="text-4xl font-black">+</h1>
+        <BigNumber label="Компонент Б" value={result.b} />
+        <h1 className="text-4xl font-black">=</h1>
+        <BigNumber label="Общая масса" value={result.both} />
+      </div>
+      {/* <p className="font-semibold">Масса компонента А: {result.a} г</p>
       <p className="font-semibold">Масса компонента Б: {result.b} г</p>
-      <p className="font-semibold">Общая масса: {result.both} г</p>
+      <p className="font-semibold">Общая масса: {result.both} г</p> */}
     </div>
   );
 };
