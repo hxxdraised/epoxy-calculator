@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
-import { NumberInput } from "./ui/NumberInput";
 import { BigNumber } from "./ui/BigNumber";
+import { NumberInput } from "@heroui/react";
 
 export const Calculator: React.FC = () => {
   const [volume, setVolume] = useState(0);
@@ -21,6 +21,7 @@ export const Calculator: React.FC = () => {
   return (
     <div className="flex flex-col gap-6">
       <NumberInput
+        size="lg"
         label="Объем молда (мл)"
         value={volume}
         onValueChange={setVolume}
@@ -28,6 +29,7 @@ export const Calculator: React.FC = () => {
       <div className="flex flex-wrap items-end gap-4">
         <div className="grow">
           <NumberInput
+            size="lg"
             label="Плотность эпоксидной смолы (г/см^3)"
             value={density}
             onValueChange={setDensity}
@@ -55,14 +57,11 @@ export const Calculator: React.FC = () => {
       </div>
       <div className="flex flex-wrap justify-center gap-2 sm:gap-4 sm:p-6">
         <BigNumber label="Компонент А" value={result.a} />
-        <h1 className="text-4xl font-black">+</h1>
+        <h1 className="text-4xl font-black text-slate-500">+</h1>
         <BigNumber label="Компонент Б" value={result.b} />
-        <h1 className="text-4xl font-black">=</h1>
+        <h1 className="text-4xl font-black text-slate-500">=</h1>
         <BigNumber label="Общая масса" value={result.both} />
       </div>
-      {/* <p className="font-semibold">Масса компонента А: {result.a} г</p>
-      <p className="font-semibold">Масса компонента Б: {result.b} г</p>
-      <p className="font-semibold">Общая масса: {result.both} г</p> */}
     </div>
   );
 };
